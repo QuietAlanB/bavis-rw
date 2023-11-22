@@ -180,7 +180,7 @@ def ClearScreen():
 # constant vars
 mispellMessages = ["You fool.", "Moron.", "Imbecile.", "Don't let it happen again.", "Clusmy, aren't you?", "Great job, moron.", "Idiot."]
 version = "1.1"
-startTime = time.time()
+startTime = None
 
 # game vars
 running = True
@@ -201,16 +201,18 @@ print("│       Type 'help' for a basic guide       │")
 print("╘═══════════════════════════════════════════╛")
 
 while running:
-        text = input("> ")
-        ClearScreen()
-        
-        if (text == "bavis"):
-                bavis += 1 * multiplier
-                totalBavis += 1 * multiplier
-                print(f"Bavis: {bavis}")
+    text = input("> ")
+    ClearScreen()
 
-        elif (text.lower() in ["shop", "store"]):
-                Store()
+    if (text == "bavis"):
+        if startTime is None:  # Check if the timer has not started
+            startTime = time.time()  # Record the start time
+        bavis += 1 * multiplier
+        totalBavis += 1 * multiplier
+        print(f"Bavis: {bavis}")
+
+    elif (text.lower() in ["shop", "store"]):
+        Store()
 
         elif (text.lower() in ["options", "settings", "option", "setting"]):
                 Options()
