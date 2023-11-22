@@ -1,0 +1,6 @@
+golden bavis are by default a 1 in 10000 drop
+
+crystal bavis are by default a 1 in 1000 drop and they can be opened at a special store to give a special item/effect/boost
+(for example, opening one can give a 1.2x boost to your bavis, can give a golden bavis, and so on)
+
+a refinery/forgery to open crystal bavis but also to craft stuff
