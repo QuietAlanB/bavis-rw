@@ -116,6 +116,7 @@ def BuyMultiplier(type):
 def BuyLife():
         global bavis
         global life
+        global totalLives
         
         cost = 35 ** (life + 1)
 
@@ -131,7 +132,9 @@ def BuyLife():
         if (confirm.lower() in ["yes", "y"]):
                 bavis -= cost
                 life += 1
+                totalLives += 1
                 print(f"+1 life ({life} now)")
+
         elif (confirm.lower() in ["no", "n"]):
                 return
         
@@ -156,7 +159,18 @@ def HelpText():
         print("│ results in you losing a life              │")
         print("│ If you lose all your lives, your game is  │")
         print("│ over                                      │")
+        print("├───────────────────────────────────────────┤")
+        print("│ Type 'time' to show how long you've been  │")
+        print("│ playing for                               │")
+        print("│ This will also show at the end of the     │")
+        print("│ game                                      │")
         print("╘═══════════════════════════════════════════╛")
+
+def GetElapsedTime():
+        global startTime
+
+        elapsedTime = time.time() - startTime
+        return round(elapsedTime, 2)
 
 def ClearScreen():
         global clearScreen
@@ -165,7 +179,8 @@ def ClearScreen():
 
 # constant vars
 mispellMessages = ["You fool.", "Moron.", "Imbecile.", "Don't let it happen again.", "Clusmy, aren't you?", "Great job, moron.", "Idiot."]
-version = "1.0"
+version = "1.1"
+startTime = time.time()
 
 # game vars
 running = True
@@ -173,6 +188,9 @@ running = True
 bavis = 0
 multiplier = 1
 life = 3
+
+totalBavis = 0
+totalLives = 3
 
 clearScreen = False
 
@@ -188,6 +206,7 @@ while running:
         
         if (text == "bavis"):
                 bavis += 1 * multiplier
+                totalBavis += 1 * multiplier
                 print(f"Bavis: {bavis}")
 
         elif (text.lower() in ["shop", "store"]):
@@ -199,13 +218,26 @@ while running:
         elif (text.lower() in ["help", "helps", "guide"]):
                 HelpText()
 
+        elif (text.lower() in ["time", "gettime", "times"]):
+                print(f"Time since start: {GetElapsedTime()} seconds")
+
         else:
                 print(f"{COLOR.RED}{random.choice(mispellMessages)}")
                 life -= 1
                 print(f"{COLOR.RED}(-1 life, {life} left){COLOR.WHITE}")
 
                 if (life <= 0):
-                        time.sleep(2.5)
+                        time.sleep(2)
                         os.system("cls")
                         print(f"{COLOR.RED}Well done, you lost.{COLOR.WHITE}")
-                        exit()
+                        running = False
+
+print(f"{COLOR.DARKRED}╒═══════════════════════════════════════════╕")
+print(f"{COLOR.DARKRED}│                FINAL STATS                │")
+print(f"{COLOR.DARKRED}╘═══════════════════════════════════════════╛")
+print(f"{COLOR.RED}Final bavis: {bavis}")
+print(f"{COLOR.RED}Multipliers: {multiplier}")
+print(f"{COLOR.RED}Total bavis: {totalBavis}")
+print(f"{COLOR.RED}Total lives: {totalLives}")
+print(f"{COLOR.RED}Total time: {GetElapsedTime()} seconds")
+print(f"{COLOR.DARKRED}═════════════════════════════════════════════{COLOR.WHITE}")
