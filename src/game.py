@@ -169,6 +169,9 @@ def HelpText():
 def GetElapsedTime():
         global startTime
 
+        if (startTime == 0):
+                return 0
+
         elapsedTime = time.time() - startTime
         return round(elapsedTime, 2)
 
@@ -180,10 +183,10 @@ def ClearScreen():
 # constant vars
 mispellMessages = ["You fool.", "Moron.", "Imbecile.", "Don't let it happen again.", "Clusmy, aren't you?", "Great job, moron.", "Idiot."]
 version = "1.1"
-startTime = time.time()
 
 # game vars
 running = True
+startTime = 0
 
 bavis = 0
 multiplier = 1
@@ -205,6 +208,10 @@ while running:
         ClearScreen()
         
         if (text == "bavis"):
+                # start timer
+                if (startTime == 0):
+                        startTime = time.time()
+
                 bavis += 1 * multiplier
                 totalBavis += 1 * multiplier
                 print(f"Bavis: {bavis}")
