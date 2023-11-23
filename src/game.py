@@ -212,8 +212,8 @@ while running:
                 if (startTime == 0):
                         startTime = time.time()
 
-                bavis += 1 * multiplier
-                totalBavis += 1 * multiplier
+                bavis += multiplier
+                totalBavis += multiplier
                 print(f"Bavis: {bavis}")
 
         elif (text.lower() in ["shop", "store"]):
