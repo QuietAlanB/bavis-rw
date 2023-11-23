@@ -278,4 +278,4 @@ print(COLOR.DARKRED)
 ShowStats()
 print(COLOR.WHITE)
 
-input("Press ANYTHING to quit...")
+input("Press ENTER to quit...")
