@@ -18,3 +18,4 @@ class COLOR:
         PINK = "\x1b[38;5;207m"
         PURPLE = "\x1b[38;5;93m"
         WHITE = "\x1b[38;5;15m"
+        GRAY = "\x1b[38;5;239m"

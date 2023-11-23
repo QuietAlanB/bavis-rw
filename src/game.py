@@ -22,18 +22,40 @@ def Store():
         if (text == "1" or text == "1."): BavisStore()
 
 def BavisStore():
+        global bavis
+        global life
+        
+        maxMultCost = int(bavis - bavis % 50)
+        if (bavis < 50):
+                maxMultCost = 50
+
+        lifeCost = 35 ** (life + 1)
+
+        # text
+        oneMultText = f"{COLOR.GREEN}50b{COLOR.WHITE}"
+        maxMultText = f"{COLOR.GREEN}{maxMultCost}b{COLOR.WHITE}"
+        userMultText = f"{COLOR.GREEN}50b each{COLOR.WHITE}"
+        lifeCostText = f"{COLOR.GREEN}{lifeCost}b{COLOR.WHITE}"
+        if (bavis < 50):
+                oneMultText = f"{COLOR.RED}50b{COLOR.WHITE}"
+                maxMultText = f"{COLOR.RED}{maxMultCost}b{COLOR.WHITE}"
+                userMultText = f"{COLOR.RED}50b each{COLOR.WHITE}"
+
+        if (bavis < lifeCost):
+                lifeCostText = f"{COLOR.RED}{lifeCost}b{COLOR.WHITE}"
+
         print("╒═══════════════════════════════════════════╕")
         print("│                BAVIS STORE                │")
         print("├───────────────────────────────────────────┤")
         print("│        (Type the number/letter of         │")
         print("│           what you'd like to do)          │")
-        print("╞═══════════════ MULTIPLIERS ════╤══════════╡")
-        print("│ 1. 1x Multiplier               │    50b   │")
-        print("│ 2. Max Multipliers             │     -    │")
-        print("│ 3. User specified multipliers  │ 50b each │")
-        print("╞═══════════════════ LIVES ══════╤══════════╡")
-        print("│ 4. +1 life                     │     -    │")
-        print("╘════════════════════════════════╧══════════╛")
+        print("╞═══════════════ MULTIPLIERS ════╤══════════╛")
+        print(f"│ 1. 1x Multiplier               │ {oneMultText}")
+        print(f"│ 2. Max Multipliers             │ {maxMultText}")
+        print(f"│ 3. User specified multipliers  │ {userMultText}")
+        print("╞═══════════════════ LIVES ══════╪═══════════")
+        print(f"│ 4. +1 life                     │ {lifeCostText}")
+        print("╘════════════════════════════════╧═══════════")
 
         text = input("[BAVIS STORE] > ")
         ClearScreen()
@@ -52,10 +74,10 @@ def Options():
         print("│          BAVIS SIMULATOR OPTIONS          │")
         print("├───────────────────────────────────────────┤")
         print("│        (Type the number/letter of         │")
-        print("│         what you'd like to toggle)        │")
+        print("│         what you'd like to change)        │")
         print("╞═══════════════════════════════════════════╡")
-        if (clearScreen): print(f"│ {COLOR.GREEN}1. Clear screen after input{COLOR.WHITE}               │")
-        else: print(f"│ {COLOR.RED}1. Clear screen after input{COLOR.WHITE}               │")
+        if (clearScreen): print(f"│ {COLOR.GREEN}1. Clear screen after input            ON {COLOR.WHITE}│")
+        else: print(f"│ {COLOR.RED}1. Clear screen after input           OFF {COLOR.WHITE}│")
         print("╘═══════════════════════════════════════════╛")
 
         text = input("[BAVIS STORE] > ")
@@ -63,8 +85,8 @@ def Options():
 
         if (text == "1" or text == "1."): 
                 clearScreen = not clearScreen
-                if (clearScreen): print(f"{COLOR.GREEN}[-] Now clearing screen after input{COLOR.WHITE}")
-                else: print(f"{COLOR.RED}[-] No longer clearing screen after input{COLOR.WHITE}")
+                if (clearScreen): print(f"{COLOR.GREEN}[-] Turned on screen clear{COLOR.WHITE}")
+                else: print(f"{COLOR.RED}[-] Turned off screen clear{COLOR.WHITE}")
 
 # buy functions for menus
 def BuyMultiplier(type):
@@ -116,73 +138,80 @@ def BuyMultiplier(type):
 def BuyLife():
         global bavis
         global life
-        global totalLives
+        global totalBoughtLives
         
         cost = 35 ** (life + 1)
 
         if (bavis < cost):
-                print(f"[!] You don't have enough bavis! ({cost} needed)")
+                print(f"[!] You don't have enough bavis!")
                 return
 
-        print(f"Another life will cost you {cost} bavis. Are you sure you want to buy this? ({life} lives currently)")
-        
-        confirm = input("[Yes/No] > ")
-        ClearScreen()
-
-        if (confirm.lower() in ["yes", "y"]):
-                bavis -= cost
-                life += 1
-                totalLives += 1
-                print(f"+1 life ({life} now)")
-
-        elif (confirm.lower() in ["no", "n"]):
-                return
+        bavis -= cost
+        life += 1
+        totalBoughtLives += 1
         
 def HelpText():
         print("╒═══════════════════════════════════════════╕")
         print("│            BAVIS SIMULATOR HELP           │")
-        print("├───────────────────────────────────────────┤")
-        print("│ Type 'bavis' to increase your bavis by 1  │")
-        print("│ Using 'bavis' is how you play the game    │")
-        print("├───────────────────────────────────────────┤")
-        print("│ Type 'shop' or 'store' to access the shop │")
-        print("│ You can buy certain items in these stores │")
-        print("│ Navigate around these stores using the    │")
-        print("│ numbers and letters listed on the left of │")
-        print("│ the stores                                │")
-        print("├───────────────────────────────────────────┤")
+        print("├─────────────── HOW TO PLAY ───────────────┤")
+        print("│ Type 'bavis' to increase your bavis by 1. │")
+        print("│ Using 'bavis' is how you play the game.   │")
+        print("│ There are many 'areas' you can go to that │")
+        print("│ you can buy stuff from, do stuff at, and  │")
+        print("│ so on - These will help you progress.     │")
+        print("│ Mispelling anything outside of an area    │")
+        print("│ results in you losing a life.             │")
+        print("│ If you lose all your lives, your game is  │")
+        print("│ over.                                     │")
+        print("├─────────────── AREAS - SHOP ──────────────┤")
+        print("│ Type 'shop' or 'store' to access the      │")
+        print("│ shop.                                     │")
+        print("│ This shop allows you to access the        │")
+        print("│ bavis store and the golden store.         │")
+        print("│ You can buy various items for bavis from  │")
+        print("│ the bavis store, such as multipliers,     │")
+        print("│ lives, and so on.                         │")
+        print("│ The golden store sells items for golden   │")
+        print("│ bavis, such as bavis, crates, boosters,   │")
+        print("│ badges and so on.                         │")
+        print("├───────────────── COMMANDS ────────────────┤")
         print("│ Type 'settings' or 'options' to access    │")
         print("│ settings which you can change to better   │")
-        print("│ suit your playstyle                       │")
-        print("├───────────────────────────────────────────┤")
-        print("│ Mispelling anything outside of a store    │")
-        print("│ results in you losing a life              │")
-        print("│ If you lose all your lives, your game is  │")
-        print("│ over                                      │")
-        print("├───────────────────────────────────────────┤")
-        print("│ Type 'time' to show how long you've been  │")
-        print("│ playing for                               │")
-        print("│ This will also show at the end of the     │")
-        print("│ game                                      │")
+        print("│ suit your playstyle.                      │")
+        print("│                                           │")
+        print("│ Type 'time' to show the amount of time    │")
+        print("│ elapsed since you started the game.       │")
+        print("│                                           │")
+        print("│ Type 'stats' or 'stat' to show your       │")
+        print("│ current statistics.                       │")
         print("╘═══════════════════════════════════════════╛")
 
 def GetElapsedTime():
-        global startTime
-
         if (startTime == 0):
                 return 0
 
         elapsedTime = time.time() - startTime
         return round(elapsedTime, 2)
 
+def ShowStats():
+        print(f"╒═══════════════════════════════════════════╕")
+        print(f"│                 STATISTICS                │")
+        print(f"├───────────────────────────────────────────┘")
+        print(f"│ Bavis: {bavis}")
+        print(f"│ Multipliers: {multiplier}")
+        print(f"│ Total bavis collected: {totalBavis}")
+        print(f"│ Total lives bought: {totalBoughtLives}")
+        print(f"│ Total lives lost: {totalLostLives}")
+        print(f"│ Total time: {GetElapsedTime()} seconds")
+        print(f"╘═══════════════════════════════════════════")
+
 def ClearScreen():
-        global clearScreen
         if (clearScreen): print("\x1b[2J")
         
 
 # constant vars
 mispellMessages = ["You fool.", "Moron.", "Imbecile.", "Don't let it happen again.", "Clusmy, aren't you?", "Great job, moron.", "Idiot."]
-version = "1.1"
+version = "1.2"
 
 # game vars
 running = True
@@ -193,12 +222,13 @@ multiplier = 1
 life = 3
 
 totalBavis = 0
-totalLives = 3
+totalBoughtLives = 0
+totalLostLives = 0
 
 clearScreen = False
 
 print("╒═══════════════════════════════════════════╕")
-print(f"│               BAVIS-RW - {version}v             │")
+print(f"│               BAVIS-RW - v{version}             │")
 print("│   https://github.com/QuietAlanB/bavis-rw  │")
 print("│       Type 'help' for a basic guide       │")
 print("╘═══════════════════════════════════════════╛")
@@ -227,10 +257,15 @@ while running:
 
         elif (text.lower() in ["time", "gettime", "times"]):
                 print(f"Time since start: {GetElapsedTime()} seconds")
+        
+        elif (text.lower() in ["stats", "stat", "statistics", "statistic"]):
+                ShowStats()
 
         else:
-                print(f"{COLOR.RED}{random.choice(mispellMessages)}")
                 life -= 1
+                totalLostLives += 1
+
+                print(f"{COLOR.RED}{random.choice(mispellMessages)}")
                 print(f"{COLOR.RED}(-1 life, {life} left){COLOR.WHITE}")
 
                 if (life <= 0):
@@ -239,12 +274,8 @@ while running:
                         print(f"{COLOR.RED}Well done, you lost.{COLOR.WHITE}")
                         running = False
 
-print(f"{COLOR.DARKRED}╒═══════════════════════════════════════════╕")
-print(f"{COLOR.DARKRED}│                FINAL STATS                │")
-print(f"{COLOR.DARKRED}╘═══════════════════════════════════════════╛")
-print(f"{COLOR.RED}Final bavis: {bavis}")
-print(f"{COLOR.RED}Multipliers: {multiplier}")
-print(f"{COLOR.RED}Total bavis: {totalBavis}")
-print(f"{COLOR.RED}Total lives: {totalLives}")
-print(f"{COLOR.RED}Total time: {GetElapsedTime()} seconds")
-print(f"{COLOR.DARKRED}═════════════════════════════════════════════{COLOR.WHITE}")
+print(COLOR.DARKRED)
+ShowStats()
+print(COLOR.WHITE)
+
+input("Press ANYTHING to quit...")
