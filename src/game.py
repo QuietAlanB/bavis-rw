@@ -184,6 +184,9 @@ def HelpText():
         print("│                                           │")
         print("│ Type 'stats' or 'stat' to show your       │")
         print("│ current statistics.                       │")
+        print("│                                           │")
+        print("│ Type 'finish' or 'done' to instantly end  │")
+        print("│ the game and display statistics.          │")
         print("╘═══════════════════════════════════════════╛")
 
 def GetElapsedTime():
@@ -260,6 +263,10 @@ while running:
         
         elif (text.lower() in ["stats", "stat", "statistics", "statistic"]):
                 ShowStats()
+
+        elif (text.lower() in ["end", "done", "finish"]):
+                print(f"{COLOR.RED}Game ended, well done.{COLOR.WHITE}")
+                break
 
         else:
                 life -= 1
