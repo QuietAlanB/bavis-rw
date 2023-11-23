@@ -111,7 +111,7 @@ def BuyMultiplier(type):
 
                 multBought = multInt
 
-        print(f"{multBought} multiplier(s) bought!")
+        print(f"{multBought} multiplier(s) bought! ({multiplier} now)")
 
 def BuyLife():
         global bavis
