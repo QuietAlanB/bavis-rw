@@ -121,7 +121,7 @@ def BuyLife():
         cost = 35 ** (life + 1)
 
         if (bavis < cost):
-                print("[!] You don't have enough bavis!")
+                print(f"[!] You don't have enough bavis! ({cost} needed)")
                 return
 
         print(f"Another life will cost you {cost} bavis. Are you sure you want to buy this? ({life} lives currently)")
@@ -177,7 +177,7 @@ def GetElapsedTime():
 
 def ClearScreen():
         global clearScreen
-        if (clearScreen): os.system("cls")
+        if (clearScreen): print("\x1b[2J")
         
 
 # constant vars
@@ -235,7 +235,7 @@ while running:
 
                 if (life <= 0):
                         time.sleep(2)
-                        os.system("cls")
+                        ClearScreen()
                         print(f"{COLOR.RED}Well done, you lost.{COLOR.WHITE}")
                         running = False
 
