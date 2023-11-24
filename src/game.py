@@ -149,6 +149,7 @@ def BuyLife():
         bavis -= cost
         life += 1
         totalBoughtLives += 1
+        print(f"+1 life ({life} now)")
         
 def HelpText():
         print("╒═══════════════════════════════════════════╕")
