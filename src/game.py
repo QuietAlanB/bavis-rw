@@ -207,6 +207,7 @@ def ShowStats():
         print(f"│ Total lives bought: {totalBoughtLives}")
         print(f"│ Total lives lost: {totalLostLives}")
         print(f"│ Total time: {GetElapsedTime()} seconds")
+        print(f"│ Version: v{version}")
         print(f"╘═══════════════════════════════════════════")
 
 def ClearScreen():
