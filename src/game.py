@@ -38,11 +38,11 @@ def BavisStore():
         lifeCostText = f"{COLOR.GREEN}{lifeCost}b{COLOR.WHITE}"
         if (bavis < 50):
                 oneMultText = f"{COLOR.RED}50b{COLOR.WHITE}"
-                maxMultText = f"{COLOR.RED}{maxMultCost}b{COLOR.WHITE}"
+                maxMultText = f"{COLOR.RED}{DisplayNumber(maxMultCost)}b{COLOR.WHITE}"
                 userMultText = f"{COLOR.RED}50b each{COLOR.WHITE}"
 
         if (bavis < lifeCost):
-                lifeCostText = f"{COLOR.RED}{lifeCost}b{COLOR.WHITE}"
+                lifeCostText = f"{COLOR.RED}{DisplayNumber(lifeCost)}b{COLOR.WHITE}"
 
         print("╒═══════════════════════════════════════════╕")
         print("│                BAVIS STORE                │")
@@ -69,6 +69,7 @@ def BavisStore():
 # options
 def Options():
         global clearScreen
+        global commaNumber
 
         print("╒═══════════════════════════════════════════╕")
         print("│          BAVIS SIMULATOR OPTIONS          │")
@@ -78,15 +79,23 @@ def Options():
         print("╞═══════════════════════════════════════════╡")
         if (clearScreen): print(f"│ {COLOR.GREEN}1. Clear screen after input            ON {COLOR.WHITE}│")
         else: print(f"│ {COLOR.RED}1. Clear screen after input           OFF {COLOR.WHITE}│")
+        if (commaNumber): print(f"│ {COLOR.GREEN}2. Display numbers with commas         ON {COLOR.WHITE}│")
+        else: print(f"│ {COLOR.RED}2. Display numbers with commas        OFF {COLOR.WHITE}│")
         print("╘═══════════════════════════════════════════╛")
 
-        text = input("[BAVIS STORE] > ")
+        text = input("[OPTIONS] > ")
         ClearScreen()
 
         if (text == "1" or text == "1."): 
                 clearScreen = not clearScreen
                 if (clearScreen): print(f"{COLOR.GREEN}[-] Turned on screen clear{COLOR.WHITE}")
                 else: print(f"{COLOR.RED}[-] Turned off screen clear{COLOR.WHITE}")
+
+        if (text == "2" or text == "2."): 
+                commaNumber = not commaNumber
+                if (commaNumber): print(f"{COLOR.GREEN}[-] Turned on commas in numbers{COLOR.WHITE}")
+                else: print(f"{COLOR.RED}[-] Turned off commas in numbers{COLOR.WHITE}")
+
 
 # buy functions for menus
 def BuyMultiplier(type):
@@ -133,7 +142,7 @@ def BuyMultiplier(type):
 
                 multBought = multInt
 
-        print(f"{multBought} multiplier(s) bought! ({multiplier} now)")
+        print(f"{DisplayNumber(multBought)} multiplier(s) bought! ({DisplayNumber(multiplier)} now)")
 
 def BuyLife():
         global bavis
@@ -178,7 +187,7 @@ def HelpText():
         print("├───────────────── COMMANDS ────────────────┤")
         print("│ Type 'settings' or 'options' to access    │")
         print("│ settings which you can change to better   │")
-        print("│ suit your playstyle.                      │")
+        print("│ suit your style.                          │")
         print("│                                           │")
         print("│ Type 'time' to show the amount of time    │")
         print("│ elapsed since you started the game.       │")
@@ -197,22 +206,64 @@ def GetElapsedTime():
         elapsedTime = time.time() - startTime
         return round(elapsedTime, 2)
 
+# returns time as a string in minutes:seconds.millisecond format
+def DisplayTime():
+        seconds = GetElapsedTime()
+        minutes = int(seconds // 60)
+        seconds = round(seconds % 60, 2)
+
+        secondsString = str(seconds)
+        minutesString = str(minutes)
+
+        if (len(str(int(seconds))) <= 1):
+                secondsString = "0" + secondsString
+
+        if (len(minutesString) <= 1):
+                minutesString = "0" + minutesString
+        
+        return f"{minutesString}:{secondsString}"
+
 def ShowStats():
         print(f"╒═══════════════════════════════════════════╕")
         print(f"│                 STATISTICS                │")
         print(f"├───────────────────────────────────────────┘")
-        print(f"│ Bavis: {bavis}")
-        print(f"│ Multipliers: {multiplier}")
-        print(f"│ Total bavis collected: {totalBavis}")
-        print(f"│ Total lives bought: {totalBoughtLives}")
-        print(f"│ Total lives lost: {totalLostLives}")
-        print(f"│ Total time: {GetElapsedTime()} seconds")
+        print(f"│ Bavis: {DisplayNumber(bavis)}")
+        print(f"│ Multipliers: {DisplayNumber(multiplier)}")
+        print(f"│ Total bavis collected: {DisplayNumber(totalBavis)}")
+        print(f"│ Total lives bought: {DisplayNumber(totalBoughtLives)}")
+        print(f"│ Total lives lost: {DisplayNumber(totalLostLives)}")
+        print(f"│ Total time: {DisplayTime()}")
         print(f"│ Version: v{version}")
         print(f"╘═══════════════════════════════════════════")
 
+# can be toggled in options
 def ClearScreen():
         if (clearScreen): print("\x1b[2J")
-        
+
+# converts numbers to strings with commas in between every 3 digits (e.g 55555 -> 55,555)
+# can be toggled in options
+def DisplayNumber(n):
+        if (not commaNumber):
+                return str(n)
+
+        numString = str(n)
+        string = ""
+        digitRemainder = len(numString) % 3
+
+        if (digitRemainder == 0):
+                digitRemainder = 3
+
+        placeCommaVar = digitRemainder - 1
+
+        for i in range(len(numString)):
+                string += numString[i]
+                if (placeCommaVar == 0 and i != len(numString) - 1):
+                        string += ","
+                        placeCommaVar = 3
+
+                placeCommaVar -= 1
+
+        return string
 
 # constant vars
 mispellMessages = ["You fool.", "Moron.", "Imbecile.", "Don't let it happen again.", "Clusmy, aren't you?", "Great job, moron.", "Idiot."]
@@ -231,6 +282,7 @@ totalBoughtLives = 0
 totalLostLives = 0
 
 clearScreen = False
+commaNumber = True
 
 print("╒═══════════════════════════════════════════╕")
 print(f"│               BAVIS-RW - v{version}             │")
@@ -249,10 +301,7 @@ while running:
 
                 bavis += multiplier
                 totalBavis += multiplier
-                print(f"Bavis: {bavis}")
-
-        elif (text.lower() in ["shop", "store"]):
-                Store()
+                print(f"Bavis: {DisplayNumber(bavis)}")
 
         elif (text.lower() in ["options", "settings", "option", "setting"]):
                 Options()
@@ -260,8 +309,15 @@ while running:
         elif (text.lower() in ["help", "helps", "guide"]):
                 HelpText()
 
+        elif (startTime == 0):
+                print("GAME NOT STARTED - Type 'bavis' to start the game")
+                pass
+
+        elif (text.lower() in ["shop", "store"]):
+                Store()
+
         elif (text.lower() in ["time", "gettime", "times"]):
-                print(f"Time since start: {GetElapsedTime()} seconds")
+                print(f"Time since start: {DisplayTime()}")
         
         elif (text.lower() in ["stats", "stat", "statistics", "statistic"]):
                 ShowStats()
